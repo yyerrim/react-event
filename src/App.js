@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 
-import { Component } from "react";
+import { Component, useState } from "react";
 import ConfirmButton from './ConfirmButton';
 
 class Toggle extends Component {
@@ -37,6 +37,8 @@ class Toggle extends Component {
 // }
 
 function MyButton(props) {
+  const [datas, setDatas] = useState([]);
+
   const handleInsert = (title, content) => {
     console.log(`입력: ${title}, ${content}`)
   };
@@ -45,7 +47,8 @@ function MyButton(props) {
   };
 
   const handleClick = (value) => {
-    alert('클릭' + value);
+    // alert('클릭' + value);
+    props.func(999);
   };
 
   return (
@@ -56,6 +59,32 @@ function MyButton(props) {
       <button onClick={handleClick}>버튼</button>
       <button onClick={() => { handleClick(1000); }}>버튼</button>
       <button onClick={handleClick.bind(this, 2000)}>버튼</button>
+
+      <button onClick={async () => {
+        const url = "http://ggoreb.com/api/youtube.jsp";
+        const res = await fetch(url);
+        const data = await res.json();
+
+        const items = data['items'];
+        // const item = items[0];
+        // const title = item.snippet.title;
+        // console.log(title);
+        setDatas(items);
+      }}>
+        버튼
+      </button>
+      {
+        datas.map((data, index) => {
+          return (
+            <div>
+              <img src={data.snippet.thumbnails.default.url} />
+              <a href={`https://www.youtube.com/watch?v=${data.id.videoId}`} target='_blank'>
+                {data.snippet.title}
+              </a>
+            </div>
+          );
+        })
+      }
     </div>
   );
 }
@@ -81,11 +110,18 @@ function MyButton(props) {
 // }
 
 function App() {
+  const [num, setNum] = useState(0);
+
+  const setData = (n) => {
+    alert(n);
+    setNum(n);
+  };
+
   return (
     <div className="App">
       <Toggle />
-      <MyButton />
-      <ConfirmButton />
+      <MyButton func={setData} />
+      <ConfirmButton num={num} />
     </div>
   );
 }

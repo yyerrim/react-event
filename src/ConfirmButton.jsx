@@ -11,9 +11,12 @@ class ConfirmButton extends Component {
   }
   render() {
     return (
-      <button onClick={this.handleConfirm} disabled={this.state.isConfirmed}>
-        {this.state.isConfirmed ? '확인됨' : '확인하기'}
-      </button>
+      <div>
+        <button onClick={this.handleConfirm} disabled={this.state.isConfirmed}>
+          {this.state.isConfirmed ? '확인됨' : '확인하기'}
+        </button>
+        <h1>{this.props.num}</h1>
+      </div>
     )
   }
 }
